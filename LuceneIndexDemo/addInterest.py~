@@ -1,0 +1,27 @@
+print """*********************************This is a console based application.Kindly add your interset***************************
+                                               """
+print " Kindly Add you interests from the given list"
+print "Your name"
+name=raw_input()
+from py2neo import neo4j,cypher
+g=neo4j.GraphDatabaseService()
+l=cypher.execute(g,'match n where has(n.type) return distinct n.type')
+l=l[0]
+for i in range(len(l)):
+	l[i]=str(l[i][0])
+print "Choose from the list: "
+print l
+flag=0
+l1=[]
+while len(l)!=0:
+	interest=raw_input()
+	l.remove(interest)
+	l1.append(interest)
+	print "do you want to exit (y/n)?"
+	exit_cmd=raw_input()
+	if exit_cmd=='y':
+		break
+query="MATCH (n:People) where n.name='"+name+"' set n.interest="+l1
+print query
+cypher.execute(g,query);
+
